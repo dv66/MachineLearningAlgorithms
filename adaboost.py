@@ -11,13 +11,10 @@ class AdaBoostClassifier:
     def __getParameters(self, nRounds, dataSet):
         nTotal = len(dataSet)
         W = [1/nTotal for x in range(nTotal)]
-        ar = [i for i in range(nTotal)]
         H = []
         Z = []
         for k in range(nRounds):
-            resampledIndices = []
-            for i in range(nTotal):
-                resampledIndices.append(np.random.choice(ar, p=W))
+            resampledIndices = np.random.choice(nTotal,nTotal, p=W)
             resampledData = dataSet[ resampledIndices, :]
             weakLearner = DecisionTree(maxDepth=1)
             weakLearner.train(resampledData)
