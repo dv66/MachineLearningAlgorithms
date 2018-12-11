@@ -2,7 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-FILE = '../dataset/data.txt'
+# FILE = '../dataset/data.txt'
+FILE = '../dataset/online.txt'
 fp = open(FILE)
 
 def normalize(dataSet):
@@ -61,27 +62,24 @@ def getLabelFromProbability(prob):
 
 '''
 EM Algorithm
-in our case 
-k = 3  
+in our case
+k = 3
 '''
-K = 3
+K = 4
 dimension = 2
 N = len(data)
 data = np.array([[X[i], y[i]] for i in range(N)])
 
-chunk = int(len(data)/3)
-d1,d2,d3 = data[:chunk] ,data[chunk:chunk*2], data[chunk*2:]
-
-
 '''initialization'''
-means = np.array([np.mean(d1,axis=0), np.mean(d2,axis=0), np.mean(d3,axis=0)])
-covariances = np.array([np.cov(d1.T), np.cov(d2.T), np.cov(d3.T)])
-mixingCoefficients = np.array([1/3 for i in range(K)])
-probabilities = [[0,0,0] for i in range(N)]
+means = np.array([[np.random.uniform(0,1) for j in range(dimension)] for i in range(K)])
+covariances = np.array([np.identity(dimension) for i in range(K)])
+mixingCoefficients = np.array([1/K for i in range(K)])
+probabilities = [[0 for k in range(K)] for i in range(N)]
 
 
 logLikelihood = []
 prev = 0
+labels=  None
 while True:
     ''' E step'''
     for i in range (N):
@@ -144,3 +142,7 @@ print('# of iterations = ', len(logLikelihood))
 x = [i for i in range(len(logLikelihood))]
 plt.plot(x, logLikelihood ,c='g',marker='.')
 plt.show()
+
+data = data.tolist()
+data = [data[i] + [labels[i]] for i in range(len(data))]
+np.savetxt('al.txt', data)
