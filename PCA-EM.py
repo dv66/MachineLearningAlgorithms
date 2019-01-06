@@ -131,6 +131,7 @@ while True:
     labels = [getLabelFromProbability(probabilities[i]) for i in range(N)]
     plt.scatter(data[:, 0], data[:, 1],c=labels,marker='.')
     plt.show()
+    plt.close()
 
 
 
@@ -142,7 +143,3 @@ print('# of iterations = ', len(logLikelihood))
 x = [i for i in range(len(logLikelihood))]
 plt.plot(x, logLikelihood ,c='g',marker='.')
 plt.show()
-
-data = data.tolist()
-data = [data[i] + [labels[i]] for i in range(len(data))]
-np.savetxt('al.txt', data)
